@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026年早春 房総3大魚種 攻略インフォグラフィック</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #F8FAFC; color: #0F172A; }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 650px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px; 
+            max-height: 400px; 
+        }
+        @media (max-width: 640px) { .chart-container { height: 280px; } }
+        .card { background-color: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 1.5rem; border: 1px solid #E2E8F0; }
+        .accent-border { border-left: 6px solid #F97316; }
+        .section-header { font-size: 1.5rem; font-weight: 700; color: #1E3A8A; margin-bottom: 1.5rem; display: flex; align-items: center; }
+        .fish-card { transition: transform 0.2s; }
+        .fish-card:hover { transform: translateY(-5px); }
+        .table-container { max-height: 550px; overflow-y: auto; }
+        .table-container::-webkit-scrollbar { width: 6px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        .table-container::-webkit-scrollbar-thumb { background: #1E3A8A; border-radius: 10px; }
+        .target-tag { font-size: 0.7rem; font-weight: bold; padding: 2px 8px; border-radius: 4px; display: inline-block; white-space: nowrap; }
+    </style>
+    <!-- 
+    Palette Chosen: "Brilliant Blues"
+    Narrative: 
+    1. Winter Shore Fishing Difficulty (Line Chart).
+    2. Focus on 3 Targets (Aji, Rootfish, Tachiuo).
+    3. Location Context (Text only).
+    4. Vertical Forecast Table with Targets.
+    Confirmed: NO SVG, NO MERMAID JS. Radar chart removed as per request.
+    -->
+</head>
+<body class="bg-slate-50">
+
+    <header class="bg-blue-900 text-white py-10 px-6 shadow-2xl overflow-hidden relative">
+        <div class="container mx-auto max-w-6xl relative z-10">
+            <h1 class="text-4xl md:text-5xl font-black mb-4">房総 釣行戦略 2026</h1>
+            <p class="text-blue-200 text-lg md:text-xl max-w-2xl font-light">
+                木更津を拠点とする2月・3月の攻略ガイド。厳寒期を「船」と「知識」で攻略する。
+            </p>
+        </div>
+        <div class="absolute right-0 top-0 w-64 h-64 bg-blue-800 rounded-full opacity-20 -mr-20 -mt-20"></div>
+    </header>
+
+    <main class="container mx-auto max-w-6xl p-4 md:p-8 space-y-12">
+
+        <!-- Section 1: The Winter Hardship -->
+        <section class="space-y-6">
+            <div class="card accent-border bg-blue-50/50">
+                <h2 class="section-header">❄️ 冬の陸釣りが「修行」と言われる理由</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p class="text-gray-700 leading-relaxed mb-4">
+                            2月・3月の海水温は年間で最低の<span class="text-blue-600 font-bold">約9℃〜11℃</span>まで下がります。多くの魚は水温が安定した沖合の深場へ移動するため、岸からの釣り（陸っぱり）は極めて難易度が高くなります。
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs text-center leading-6 font-bold">!</span>
+                                <span class="text-sm font-bold">ボウズ率：陸っぱりでは50%〜80%に達することも</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs text-center leading-6 font-bold">!</span>
+                                <span class="text-sm font-bold">推奨：水温が安定する深場を攻める「船釣り」一択</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-inner border border-blue-100">
+                        <div class="chart-container">
+                            <canvas id="tempChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Three Main Targets -->
+        <section>
+            <h2 class="section-header">🐟 2-3月の3大推奨ターゲット</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Aji -->
+                <div class="card fish-card border-t-4 border-orange-500">
+                    <h3 class="text-xl font-bold text-orange-600 mb-2">LTアジ</h3>
+                    <p class="text-sm text-gray-600 mb-4">初心者が最も確実に釣果を得られる最強ターゲット。木更津港から多数出船。</p>
+                    <div class="space-y-2 mb-4 text-xs">
+                        <div class="flex justify-between"><span>難易度</span><span class="font-bold text-green-600">低</span></div>
+                        <div class="flex justify-between"><span>釣果期待値</span><span class="font-bold text-orange-600">高 (20〜40匹)</span></div>
+                    </div>
+                    <div class="bg-orange-50 p-3 rounded text-xs text-orange-800">
+                        <strong>攻略:</strong> 底から2mのタナを正確に。
+                    </div>
+                </div>
+                <!-- Rootfish -->
+                <div class="card fish-card border-t-4 border-cyan-500">
+                    <h3 class="text-xl font-bold text-cyan-600 mb-2">根魚 (カサゴ/メバル)</h3>
+                    <p class="text-sm text-gray-600 mb-4">冬でも元気。特にカサゴは裏切らない。館山方面の船や、市原の海釣り公園が舞台。</p>
+                    <div class="space-y-2 mb-4 text-xs">
+                        <div class="flex justify-between"><span>難易度</span><span class="font-bold text-green-600">低〜中</span></div>
+                        <div class="flex justify-between"><span>釣果期待値</span><span class="font-bold text-cyan-600">中 (5〜15匹)</span></div>
+                    </div>
+                    <div class="bg-cyan-50 p-3 rounded text-xs text-cyan-800">
+                        <strong>攻略:</strong> 根掛かりを恐れず際を攻める。
+                    </div>
+                </div>
+                <!-- Tachiuo -->
+                <div class="card fish-card border-t-4 border-blue-700">
+                    <h3 class="text-xl font-bold text-blue-700 mb-2">タチウオ</h3>
+                    <p class="text-sm text-gray-600 mb-4">富津沖の冬のロマン。型が良いのが特徴。少し難易度は上がるが、引きは強烈。</p>
+                    <div class="space-y-2 mb-4 text-xs">
+                        <div class="flex justify-between"><span>難易度</span><span class="font-bold text-red-600">中〜高</span></div>
+                        <div class="flex justify-between"><span>釣果期待値</span><span class="font-bold text-blue-700">低〜中 (1〜5匹)</span></div>
+                    </div>
+                    <div class="bg-blue-50 p-3 rounded text-xs text-blue-800">
+                        <strong>攻略:</strong> 誘いとアワセのタイミングが鍵。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Area Advantages (Text only) -->
+        <section class="space-y-6">
+            <h2 class="section-header">📍 木更津拠点のアドバンテージ</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-slate-900 text-white border-none h-full">
+                    <h3 class="font-bold text-orange-400 mb-4">拠点・アクセスの利点</h3>
+                    <ul class="text-sm space-y-4">
+                        <li class="flex items-start">
+                            <span class="text-orange-500 mr-2">✔</span>
+                            <span>LTアジ船の宿が近く、午前/午後の半日釣行が可能。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-orange-500 mr-2">✔</span>
+                            <span>タチウオの主戦場「富津」まで車で20分と至近。</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-orange-500 mr-2">✔</span>
+                            <span>館山まで高速で1時間。天候に合わせて南下も容易。</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <div class="p-6 bg-white rounded-xl border border-blue-100 flex items-center justify-between shadow-sm">
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">冬の第一推奨エリア</p>
+                            <p class="text-xl font-bold text-blue-900">木更津・長浦・富津</p>
+                            <p class="text-sm text-gray-500 mt-1">船釣りの選択肢が豊富で初心者へのサポートが手厚い。</p>
+                        </div>
+                        <div class="text-4xl">⚓</div>
+                    </div>
+                    <div class="p-6 bg-white rounded-xl border border-emerald-100 flex items-center justify-between shadow-sm">
+                        <div>
+                            <p class="text-xs text-gray-500 uppercase font-bold">サブプラン推奨</p>
+                            <p class="text-xl font-bold text-emerald-900">館山・南房エリア</p>
+                            <p class="text-sm text-gray-500 mt-1">水温低下が緩やか。陸からの根魚狙いならここ。</p>
+                        </div>
+                        <div class="text-4xl">🏝️</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Vertical Forecast Table -->
+        <section class="card overflow-hidden">
+            <h2 class="section-header">📅 2026年 2月・3月 釣行予報 & 推奨ターゲット</h2>
+            <p class="text-sm text-gray-600 mb-6">
+                潮回りに応じて、その日に最も有利なターゲットを選定しました。
+            </p>
+            
+            <div class="table-container rounded-lg border border-gray-200">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-blue-900 text-white sticky top-0">
+                        <tr>
+                            <th class="p-4 font-bold text-sm">日付</th>
+                            <th class="p-4 font-bold text-sm">潮</th>
+                            <th class="p-4 font-bold text-sm">推奨ターゲット</th>
+                            <th class="p-4 font-bold text-sm">指数</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 text-gray-700">
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">2/7 (土)</td>
+                            <td class="p-4 text-sm">中潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span> <span class="target-tag bg-cyan-600 text-white">根魚</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2">75</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-blue-500 h-2 rounded" style="width: 75%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">2/8 (日)</td>
+                            <td class="p-4 text-sm">中潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2">70</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-blue-500 h-2 rounded" style="width: 70%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">2/11 (祝)</td>
+                            <td class="p-4 text-sm">小潮</td>
+                            <td class="p-4"><span class="target-tag bg-cyan-600 text-white">根魚</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2 text-gray-400">45</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-slate-400 h-2 rounded" style="width: 45%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 bg-orange-50/20">
+                            <td class="p-4 text-sm font-bold text-orange-600">2/21 (土)</td>
+                            <td class="p-4 text-sm">大潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span> <span class="target-tag bg-blue-700 text-white">タチウオ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2 text-orange-600">95</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-orange-500 h-2 rounded" style="width: 95%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50 bg-orange-50/20">
+                            <td class="p-4 text-sm font-bold text-orange-600">2/22 (日)</td>
+                            <td class="p-4 text-sm">大潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span> <span class="target-tag bg-blue-700 text-white">タチウオ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2 text-orange-600">90</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-orange-500 h-2 rounded" style="width: 90%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">2/23 (祝)</td>
+                            <td class="p-4 text-sm">中潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2">80</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-blue-500 h-2 rounded" style="width: 80%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">2/28 (土)</td>
+                            <td class="p-4 text-sm">中潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span> <span class="target-tag bg-cyan-600 text-white">根魚</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2">75</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-blue-500 h-2 rounded" style="width: 75%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">3/1 (日)</td>
+                            <td class="p-4 text-sm">中潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2">70</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-blue-500 h-2 rounded" style="width: 70%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">3/7 (土)</td>
+                            <td class="p-4 text-sm">中潮</td>
+                            <td class="p-4"><span class="target-tag bg-cyan-600 text-white">根魚</span> <span class="target-tag bg-orange-500 text-white">LTアジ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2">65</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-blue-500 h-2 rounded" style="width: 65%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold text-orange-600">3/20 (祝)</td>
+                            <td class="p-4 text-sm">大潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span> <span class="target-tag bg-blue-700 text-white">タチウオ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2 text-orange-600">98</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-orange-500 h-2 rounded" style="width: 98%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold text-orange-600">3/21 (土)</td>
+                            <td class="p-4 text-sm">大潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span> <span class="target-tag bg-blue-700 text-white">タチウオ</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2 text-orange-600">92</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-orange-500 h-2 rounded" style="width: 92%"></div></div></div></td>
+                        </tr>
+                        <tr class="hover:bg-blue-50">
+                            <td class="p-4 text-sm font-bold">3/22 (日)</td>
+                            <td class="p-4 text-sm">中潮</td>
+                            <td class="p-4"><span class="target-tag bg-orange-500 text-white">LTアジ</span> <span class="target-tag bg-cyan-600 text-white">根魚</span></td>
+                            <td class="p-4"><div class="flex items-center"><span class="font-bold mr-2">85</span><div class="w-16 md:w-24 bg-gray-200 h-2 rounded"><div class="bg-blue-500 h-2 rounded" style="width: 85%"></div></div></div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="mt-4 text-xs text-gray-500">※推奨ターゲットは、潮汐（大潮＝回遊魚、小潮＝根魚など）に基づいて選定しています。</p>
+        </section>
+
+    </main>
+
+    <footer class="bg-blue-950 text-blue-300 py-10 px-6 text-center text-sm mt-12">
+        <p>© 2026 Boso Fishing Strategic Guide</p>
+        <p class="mt-2 text-xs">釣行前には必ず各船宿や施設の最新情報を確認してください。安全第一で楽しみましょう。</p>
+    </footer>
+
+    <script>
+        // --- Initialize Charts ---
+        window.onload = function() {
+            // Common Tooltip Config
+            const tooltipConfig = {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                return Array.isArray(label) ? label.join(' ') : label;
+                            }
+                        }
+                    }
+                }
+            };
+
+            // 1. Water Temp Chart (Line)
+            const ctxTemp = document.getElementById('tempChart').getContext('2d');
+            new Chart(ctxTemp, {
+                type: 'line',
+                data: {
+                    labels: ['11月', '12月', '1月', '2月', '3月', '4月'],
+                    datasets: [{
+                        label: '平均海水温 (°C)',
+                        data: [19.2, 15.5, 11.8, 9.8, 11.2, 14.5],
+                        borderColor: '#1E40AF',
+                        backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#F97316'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...tooltipConfig,
+                    scales: {
+                        y: { min: 5, max: 25, title: { display: true, text: '温度 (°C)' } }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
